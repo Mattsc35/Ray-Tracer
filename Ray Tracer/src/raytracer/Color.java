@@ -13,6 +13,7 @@ public class Color {
 	public final static Color BLACK = new Color(0, 0, 0);
 	public final static Color WHITE = new Color(1, 1, 1);
 	public final static Color YELLOW = new Color(1, 1, 0);
+	public static final Color GRAY = new Color(.5, .5, .5);
 
 	public Color(double red, double green, double blue, double alpha) {
 		setRed(red);

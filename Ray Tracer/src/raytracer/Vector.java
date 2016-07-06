@@ -1,6 +1,6 @@
 package raytracer;
 
-class Vector{
+public class Vector {
 	double x;
 	double y;
 	double z;
@@ -74,6 +74,10 @@ class Vector{
 
 	public void setZ(double z) {
 		this.z = z;
+	}
+
+	public Vector getCopy() {
+		return new Vector(x, y, z);
 	}
 
 	public String toString() {

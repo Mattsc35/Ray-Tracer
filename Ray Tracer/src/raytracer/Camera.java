@@ -32,7 +32,7 @@ public class Camera {
 		}
 		Vector unitY = new Vector(0, 1, 0);
 
-		Vector difference = cameraPosition.difference(lookAt);
+		Vector difference = cameraPosition.difference(lookAt); //Vector pointing from lookAt to cameraPosition
 		this.cameraDirection = difference.negative().normalize();
 
 		this.cameraRight = unitY.crossProduct(cameraDirection).normalize();
