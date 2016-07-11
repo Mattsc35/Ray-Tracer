@@ -20,7 +20,7 @@ public class Vector {
 
 		return new Vector((x / magnitude), (y / magnitude), (z / magnitude));
 	}
-
+	
 	public double magnitude() {
 		return Math.sqrt((x * x) + (y * y) + (z * z));
 	}

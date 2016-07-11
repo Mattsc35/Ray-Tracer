@@ -6,15 +6,17 @@ import objects.RenderableObject;
 
 public class Scene {
 	ArrayList<RenderableObject> sceneObjects;
-	Light sceneLight;
+	ArrayList<Light> sceneLights;
 
 	public Scene(Light sceneLight) {
 		sceneObjects = new ArrayList<RenderableObject>();
-		this.sceneLight = sceneLight;
+		sceneLights = new ArrayList<Light>();
+		sceneLights.add(sceneLight);
 	}
 
 	public Scene() {
-		this(new Light(new Vector(5, 5, 5), Color.WHITE));
+		sceneObjects = new ArrayList<RenderableObject>();
+		sceneLights = new ArrayList<Light>();
 	}
 
 	public void addObject(RenderableObject newObject) {
@@ -25,12 +27,16 @@ public class Scene {
 		return sceneObjects;
 	}
 
-	public Light getSceneLight() {
-		return sceneLight;
+	public ArrayList<Light> getSceneLights() {
+		return sceneLights;
 	}
 
-	public void setSceneLight(Light sceneLight) {
-		this.sceneLight = sceneLight;
+	public void setSceneLights(ArrayList<Light> sceneLights) {
+		this.sceneLights = sceneLights;
+	}
+
+	public void addSceneLight(Light sceneLight) {
+		sceneLights.add(sceneLight);
 	}
 
 }

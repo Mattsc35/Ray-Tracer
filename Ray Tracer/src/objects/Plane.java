@@ -9,7 +9,10 @@ public class Plane extends RenderableObject {
 
 	@Override
 	public Vector getNormal(Vector point) {
-		// TODO Auto-generated method stub
+		return normal;
+	}
+
+	public Vector getNormal() {
 		return normal;
 	}
 
@@ -25,23 +28,26 @@ public class Plane extends RenderableObject {
 
 	@Override
 	public double findIntersectionDistance(Ray ray) {
-		Vector rayDirection = ray.getDirection();
+		Vector point = normal.normalize().multiplyVector(distance);
 		Vector rayOrigin = ray.getOrigin();
-
-		double rayDotNormal = rayDirection.dotProduct(normal);
-
-		if (rayDotNormal == 0) { //Is parallel and will never intersect
-			return -1;
+		Vector rayDirection = ray.getDirection();
+		double denom = normal.negative().dotProduct(rayDirection);
+		if (denom > .0001) {
+			Vector aaaaa = point.difference(rayOrigin);
+			double t = Math.abs(aaaaa.dotProduct(normal) / denom);
+			if (t >= 0) {
+				return t;
+			}
+			else {
+				return t;
+			}
 		}
-		else {
-			Vector normalScaledAndNegative = normal.multiplyVector(distance).negative();
-			double result = normal.dotProduct(rayOrigin.addVector(normalScaledAndNegative));
-			return -1 * (rayDotNormal * result);
-		}
+		return -1;
 	}
 
 	public Vector findIntersection(Ray ray) {
-		return null;
+		double distance = findIntersectionDistance(ray);
+		return ray.getOrigin().addVector(ray.getDirection().multiplyVector(distance));
 	}
 
 }

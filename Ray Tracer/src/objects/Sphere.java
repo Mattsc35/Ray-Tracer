@@ -52,14 +52,14 @@ public class Sphere extends RenderableObject {
 		if (discriminant >= 0) {
 			/// the ray intersects the sphere
 			// the first root
-			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a))- 0.001;
+			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a))- 0.00001;
 
 			if (root_1 > 0) {
 				// the first root is the smallest positive root
 				return root_1;
 			}
 			else {
-				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a))- 0.001;
+				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a))- 0.00001;
 				return root_2;
 			}
 		}

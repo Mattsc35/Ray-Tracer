@@ -37,7 +37,7 @@ public class Camera {
 
 		this.cameraDirection = difference.negative().normalize();
 		this.cameraRight = unitY.crossProduct(cameraDirection).normalize();
-		this.cameraDown = cameraRight.crossProduct(cameraDirection).normalize();
+		this.cameraDown = cameraRight.crossProduct(cameraDirection);
 
 	}
 }

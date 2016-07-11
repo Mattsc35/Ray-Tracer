@@ -8,6 +8,8 @@ public class Light {
 		this(new Vector(0,0,0), Color.WHITE);
 	}
 	
+	
+	
 	public Light(Vector position, Color lightColor) {
 		this.position = position;
 		this.lightColor = lightColor;

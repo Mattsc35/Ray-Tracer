@@ -1,8 +1,8 @@
 package raytracer;
 
 public class Ray {
-	Vector origin;
-	Vector direction;
+	private Vector origin;
+	private Vector direction;
 
 	public Ray(Vector origin, Vector direction) {
 		setOrigin(origin);

@@ -75,7 +75,7 @@ public class Color {
 	}
 
 	public void setAlpha(double value) {
-		this.alpha = clamp(value, 0, 1);
+		this.alpha = value;
 	}
 
 	private double clamp(double val, double min, double max) {
