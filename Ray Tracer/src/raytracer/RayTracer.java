@@ -21,8 +21,8 @@ public class RayTracer {
 	}
 
 	public void setUpRayTracer() {
-		Vector cameraStartPosition = new Vector(0, 1, -4);
-		Vector cameraLookPosition = new Vector(0, 0, 0);
+		Vector cameraStartPosition = new Vector(0, 0, 0);
+		Vector cameraLookPosition = new Vector(0, 0, -1);
 
 		mainCamera = new Camera(cameraStartPosition, cameraLookPosition);
 	}
@@ -35,17 +35,23 @@ public class RayTracer {
 		Light initialLight = new Light(initialLightPosition, initialLightColor);
 		sceneToRender.setSceneLight(initialLight);
 
-		Vector initialSpherePosition = new Vector(1.75, 2.25, 0);
+		Vector initialSpherePosition = new Vector(0, 0, -6);
 		double initialSphereRadius = 1.0;
 		Color initialSphereColor = Color.RED;
 		Sphere theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
+		sceneToRender.addObject(theSphere);
+
+		initialSpherePosition = new Vector(1, 1, -6);
+		initialSphereRadius = 1.0;
+		initialSphereColor = Color.YELLOW;
+		theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
 		sceneToRender.addObject(theSphere);
 		/////////////
 		Vector initialPlaneNormal = Y_VECTOR.getCopy();
 		double initialPlaneDisance = -6;
 		Color initialPlaneColor = Color.GREEN;
 		Plane thePlane = new Plane(initialPlaneNormal, initialPlaneDisance, initialPlaneColor);
-	//	sceneToRender.addObject(thePlane);
+		//	sceneToRender.addObject(thePlane);
 	}
 
 	public void renderImage() {
@@ -60,8 +66,8 @@ public class RayTracer {
 		int pixelIndex = 0;
 		final Color DEFAULT_COLOR = Color.GRAY;
 
-		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
+				for (int x = width-1; x >=0 ; x--) {
 				//Creates a ray
 				double xOffset = getXOffset(x, width, height, aspectRatio);
 				double yOffset = getYOffset(y, width, height, aspectRatio);
@@ -81,9 +87,9 @@ public class RayTracer {
 				else {
 					pixels[pixelIndex] = DEFAULT_COLOR;
 				}
-				if(y == 50){
-					pixels[pixelIndex] = Color.YELLOW;
-				}
+		//		if (y == 100) {
+			//		pixels[pixelIndex] = Color.YELLOW;
+			//	}
 				/*
 				 * if (closestObjectIndex != -1) { intersectedCount++; } else{ nonIntersectedCount++; }
 				 */
@@ -136,7 +142,7 @@ public class RayTracer {
 		double dHeight = (double) height;
 		if (height < width) {
 			//Landscape
-			return ((dX + 0.5) / dWidth * aspectRatio) - ((((dWidth - height) / ((double) height)) / 2));
+			return ((dX + 0.5) / dWidth * aspectRatio) - ((((dWidth - dHeight) / ((double) dHeight)) / 2));
 		}
 		else if (height > dWidth) {
 			//Portrait

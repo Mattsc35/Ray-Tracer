@@ -26,7 +26,7 @@ public class Ray {
 	}
 
 	public void setDirection(Vector direction) {
-		this.direction = direction;
+		this.direction = direction.normalize(); //TODO see if should normalize
 	}
 
 }

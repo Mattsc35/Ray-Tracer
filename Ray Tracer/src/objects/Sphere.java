@@ -21,7 +21,7 @@ public class Sphere extends RenderableObject {
 
 	@Override
 	public Vector getNormal(Vector point) {
-		Vector normalVector = point.addVector(center.negative()).normalize();
+		Vector normalVector = point.difference(center).normalize();
 		return normalVector;
 	}
 
@@ -52,14 +52,14 @@ public class Sphere extends RenderableObject {
 		if (discriminant >= 0) {
 			/// the ray intersects the sphere
 			// the first root
-			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a));//- 0.000001;
+			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a))- 0.001;
 
 			if (root_1 > 0) {
 				// the first root is the smallest positive root
 				return root_1;
 			}
 			else {
-				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a));//- 0.000001;
+				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a))- 0.001;
 				return root_2;
 			}
 		}
@@ -71,7 +71,7 @@ public class Sphere extends RenderableObject {
 
 	public Vector findIntersection(Ray ray) {
 		double distance = findIntersectionDistance(ray);
-		
+
 		return ray.getOrigin().addVector(ray.getDirection().multiplyVector(distance));
 	}
 
