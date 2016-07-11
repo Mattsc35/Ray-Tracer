@@ -46,6 +46,12 @@ public class RayTracer {
 		initialSphereColor = Color.YELLOW;
 		theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
 		sceneToRender.addObject(theSphere);
+		
+		initialSpherePosition = new Vector(1, 0, -6);
+		initialSphereRadius = .50;
+		initialSphereColor = Color.GREEN;
+		theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
+		sceneToRender.addObject(theSphere);
 		/////////////
 		Vector initialPlaneNormal = Y_VECTOR.getCopy();
 		double initialPlaneDisance = -6;
