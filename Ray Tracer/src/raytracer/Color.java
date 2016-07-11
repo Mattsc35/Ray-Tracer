@@ -38,6 +38,26 @@ public class Color {
 		return blue;
 	}
 
+	public double brightness() {
+		return ((red + blue + green) / 3.0);
+	}
+
+	public Color addColor(Color c) {
+		return new Color(c.getRed() + red, c.getGreen() + green, c.getBlue() + blue, alpha);
+	}
+
+	public Color multiplyColor(Color c) {
+		return new Color(c.getRed() * red, c.getGreen() * green, c.getBlue() * blue, alpha);
+	}
+
+	public Color scalarColor(double scalar) {
+		return new Color(red * scalar, green * scalar, blue * scalar, alpha);
+	}
+
+	public Color averageColor(Color c) {
+		return new Color((c.getRed() + red) / 2, (c.getGreen() + green) / 2, (c.getBlue() + blue) / 2, alpha);
+	}
+
 	public double getAlpha() {
 		return alpha;
 	}
