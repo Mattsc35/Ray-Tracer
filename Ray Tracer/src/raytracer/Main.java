@@ -5,9 +5,14 @@ import java.util.Random;
 public class Main {
 
 	public static void main(String[] args) {
-		testBitmapWriting();
+		testRayTracer();
 	}
 
+	private static void testRayTracer(){
+		RayTracer rt = new RayTracer();
+		rt.renderImage();
+		System.out.println("Ayy");
+	}
 	private static void testBitmapWriting() {
 		int width = 100;
 		int height = 100;

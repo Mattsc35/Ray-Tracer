@@ -5,7 +5,8 @@ public abstract class RenderableObject {
 	Color objectColor;
 	
 	public abstract Vector getNormal(Vector point);
-	public abstract double findIntersection(Ray ray);
+	public abstract double findIntersectionDistance(Ray ray);
+	public abstract Vector findIntersection(Ray ray);
 	
 	public void setColor(Color color){
 		objectColor = color;

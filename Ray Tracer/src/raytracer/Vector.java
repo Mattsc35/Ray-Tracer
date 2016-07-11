@@ -80,6 +80,16 @@ public class Vector {
 		return new Vector(x, y, z);
 	}
 
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Vector)) {
+			return false;
+		}
+		double epsilon = .00001;
+		return (Math.abs(this.getX() - ((Vector) obj).getX()) < epsilon)
+				&& (Math.abs(this.getY() - ((Vector) obj).getY()) < epsilon)
+				&& (Math.abs(this.getZ() - ((Vector) obj).getZ()) < epsilon);
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 

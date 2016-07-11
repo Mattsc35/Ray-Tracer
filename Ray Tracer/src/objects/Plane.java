@@ -24,7 +24,7 @@ public class Plane extends RenderableObject {
 	}
 
 	@Override
-	public double findIntersection(Ray ray) {
+	public double findIntersectionDistance(Ray ray) {
 		Vector rayDirection = ray.getDirection();
 		Vector rayOrigin = ray.getOrigin();
 
@@ -38,7 +38,10 @@ public class Plane extends RenderableObject {
 			double result = normal.dotProduct(rayOrigin.addVector(normalScaledAndNegative));
 			return -1 * (rayDotNormal * result);
 		}
+	}
 
+	public Vector findIntersection(Ray ray) {
+		return null;
 	}
 
 }
