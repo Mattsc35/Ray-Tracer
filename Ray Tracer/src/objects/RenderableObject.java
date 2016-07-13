@@ -1,17 +1,22 @@
 package objects;
+
 import raytracer.*;
 
 public abstract class RenderableObject {
-	Color objectColor;
-	
+	Material objectMaterial;
+
 	public abstract Vector getNormal(Vector point);
+
 	public abstract double findIntersectionDistance(Ray ray);
+
 	public abstract Vector findIntersection(Ray ray);
-	
-	public void setColor(Color color){
-		objectColor = color;
+
+	public Material getObjectMaterial() {
+		return objectMaterial;
 	}
-	public Color getColor(){
-		return objectColor;
+
+	public void setObjectMaterial(Material objectMaterial) {
+		this.objectMaterial = objectMaterial;
 	}
+
 }

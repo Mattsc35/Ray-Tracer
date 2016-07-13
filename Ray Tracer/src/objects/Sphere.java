@@ -1,6 +1,7 @@
 package objects;
 
 import raytracer.Color;
+import raytracer.Material;
 import raytracer.Ray;
 import raytracer.Vector;
 
@@ -9,14 +10,18 @@ public class Sphere extends RenderableObject {
 	private Vector center;
 	private double radius;
 
-	public Sphere(Vector center, double radius, Color objectColor) {
+	public Sphere(Vector center, double radius, Material material) {
 		this.center = center;
 		this.radius = radius;
-		this.objectColor = objectColor;
+		this.objectMaterial = material;
+	}
+
+	public Sphere(Vector center, double radius, Color color) {
+		this(center, radius, new Material(color));
 	}
 
 	public Sphere() {
-		this(new Vector(0, 0, 0), 1, Color.BLACK);
+		this(new Vector(0, 0, 0), 1, new Material(Color.BLACK));
 	}
 
 	@Override
@@ -52,14 +57,14 @@ public class Sphere extends RenderableObject {
 		if (discriminant >= 0) {
 			/// the ray intersects the sphere
 			// the first root
-			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a))- 0.00001;
+			double root_1 = ((-1 * b - Math.sqrt(discriminant)) / (2 * a)) - 0.00001;
 
 			if (root_1 > 0) {
 				// the first root is the smallest positive root
 				return root_1;
 			}
 			else {
-				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a))- 0.00001;
+				double root_2 = ((-1 * b + Math.sqrt(discriminant)) / (2 * a)) - 0.00001;
 				return root_2;
 			}
 		}

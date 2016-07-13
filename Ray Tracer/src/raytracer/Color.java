@@ -5,7 +5,6 @@ public class Color {
 	private double red;
 	private double green;
 	private double blue;
-	private double alpha;
 
 	public final static Color RED = new Color(1, 0, 0);
 	public final static Color GREEN = new Color(0, 1, 0);
@@ -15,15 +14,10 @@ public class Color {
 	public final static Color YELLOW = new Color(1, 1, 0);
 	public static final Color GRAY = new Color(.5, .5, .5);
 
-	public Color(double red, double green, double blue, double alpha) {
+	public Color(double red, double green, double blue) {
 		setRed(red);
 		setGreen(green);
 		setBlue(blue);
-		setAlpha(alpha);
-	}
-
-	public Color(double red, double green, double blue) {
-		this(red, green, blue, 0);
 	}
 
 	public double getRed() {
@@ -43,23 +37,19 @@ public class Color {
 	}
 
 	public Color addColor(Color c) {
-		return new Color(c.getRed() + red, c.getGreen() + green, c.getBlue() + blue, alpha);
+		return new Color(c.getRed() + red, c.getGreen() + green, c.getBlue() + blue);
 	}
 
 	public Color multiplyColor(Color c) {
-		return new Color(c.getRed() * red, c.getGreen() * green, c.getBlue() * blue, alpha);
+		return new Color(c.getRed() * red, c.getGreen() * green, c.getBlue() * blue);
 	}
 
 	public Color scalarColor(double scalar) {
-		return new Color(red * scalar, green * scalar, blue * scalar, alpha);
+		return new Color(red * scalar, green * scalar, blue * scalar);
 	}
 
 	public Color averageColor(Color c) {
-		return new Color((c.getRed() + red) / 2, (c.getGreen() + green) / 2, (c.getBlue() + blue) / 2, alpha);
-	}
-
-	public double getAlpha() {
-		return alpha;
+		return new Color((c.getRed() + red) / 2, (c.getGreen() + green) / 2, (c.getBlue() + blue) / 2);
 	}
 
 	public void setRed(double value) {
@@ -72,10 +62,6 @@ public class Color {
 
 	public void setBlue(double value) {
 		this.blue = clamp(value, 0, 1);
-	}
-
-	public void setAlpha(double value) {
-		this.alpha = value;
 	}
 
 	private double clamp(double val, double min, double max) {

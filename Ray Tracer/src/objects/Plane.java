@@ -1,5 +1,7 @@
 package objects;
 
+import javax.activation.MailcapCommandMap;
+
 import raytracer.*;
 
 public class Plane extends RenderableObject {
@@ -16,14 +18,14 @@ public class Plane extends RenderableObject {
 		return normal;
 	}
 
-	public Plane(Vector normal, double distance, Color color) {
+	public Plane(Vector normal, double distance, Material material) {
 		this.normal = normal;
 		this.distance = distance;
-		this.objectColor = color;
+		this.objectMaterial = material;
 	}
 
 	public Plane() {
-		this(new Vector(1, 0, 0), 1, Color.BLUE);
+		this(new Vector(1, 0, 0), 1, new Material());
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class Plane extends RenderableObject {
 		Vector rayOrigin = ray.getOrigin();
 		Vector rayDirection = ray.getDirection();
 		double denom = normal.negative().dotProduct(rayDirection);
-		if (denom > .0001) {
+		if (Math.abs(denom) > .0001) {
 			Vector aaaaa = point.difference(rayOrigin);
 			double t = Math.abs(aaaaa.dotProduct(normal) / denom);
 			if (t >= 0) {
