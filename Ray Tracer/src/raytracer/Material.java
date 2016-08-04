@@ -9,14 +9,14 @@ public class Material {
 	private Color checkerBoardColorB = Color.WHITE;
 
 	public Material(Color materialColor, double reflection, double specular, boolean checkerBoard) {
-		this.color = materialColor;
-		this.reflection = reflection;
-		this.specular = specular;
-		this.checkerBoard = checkerBoard;
+		setColor(materialColor);
+		setReflection(reflection);
+		setSpecular(specular);
+		setCheckerBoard(checkerBoard);
 	}
 
 	public Material(Color materialColor, double reflection, double specular) {
-		this(materialColor, reflection, reflection, false);
+		this(materialColor, reflection, specular, false);
 	}
 
 	public Material(Color materialColor) {
@@ -56,11 +56,11 @@ public class Material {
 	}
 
 	public void setSpecular(double specular) {
-		this.specular = specular;
+		this.specular = clamp(specular, 0, 1);
 	}
 
 	public void setReflection(double reflection) {
-		this.reflection = reflection;
+		this.reflection = clamp(reflection, 0, 1);
 	}
 
 	public void setCheckerBoard(boolean checkerBoard) {
@@ -73,6 +73,10 @@ public class Material {
 
 	public void setCheckerBoardColorB(Color checkerBoardColorB) {
 		this.checkerBoardColorB = checkerBoardColorB;
+	}
+
+	private double clamp(double val, double min, double max) {
+		return Math.max(min, Math.min(max, val));
 	}
 
 }

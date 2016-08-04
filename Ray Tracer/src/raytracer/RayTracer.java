@@ -11,6 +11,8 @@ public class RayTracer {
 	static final Vector Y_VECTOR = new Vector(0, 1, 0);
 	static final Vector Z_VECTOR = new Vector(0, 0, 1);
 
+	int width = 640;
+	int height = 480;
 	Camera mainCamera;
 	Scene sceneToRender;
 
@@ -20,8 +22,8 @@ public class RayTracer {
 	}
 
 	public void setUpRayTracer() {
-		Vector cameraStartPosition = new Vector(0, 3, -5);
-		Vector cameraLookPosition = new Vector(0, 0, 0);
+		Vector cameraStartPosition = new Vector(0, 2, -4);
+		Vector cameraLookPosition = new Vector(0, 1, 2);
 
 		mainCamera = new Camera(cameraStartPosition, cameraLookPosition);
 	}
@@ -29,46 +31,44 @@ public class RayTracer {
 	public void setUpScene() {
 		sceneToRender = new Scene();
 
-		Vector initialLightPosition = new Vector(0, 5, 5);
-		Color initialLightColor = new Color(.6, .6, .6);
+		Vector initialLightPosition = new Vector(-1, 2.5, 0);
+		Color initialLightColor = new Color(1, 1, 1);
 		Light initialLight = new Light(initialLightPosition, initialLightColor);
 		sceneToRender.addSceneLight(initialLight);
 
-		initialLightPosition = new Vector(0, 5, 5);
-		initialLightColor = new Color(.6, 1, .6);
+		initialLightColor = new Color(.6, .6, .6);
 		initialLight = new Light(initialLightPosition, initialLightColor);
-		//	sceneToRender.addSceneLight(initialLight);
+		//		sceneToRender.addSceneLight(initialLight);
 
-		Vector initialSpherePosition = new Vector(0, 0, 5);
-		double initialSphereRadius = 1.5;
+		Vector initialSpherePosition = new Vector(0, 1, 2);
+		double initialSphereRadius = 1.0;
 		Color initialSphereColor = new Color(1, 0, 0);
-		Sphere theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
+		Material initialSphereMaterial = new Material(initialSphereColor, .99, 0);
+		Sphere theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereMaterial);
 		sceneToRender.addObject(theSphere);
 
-		initialSpherePosition = new Vector(2, 0, 5);
-		initialSphereRadius = 1.0;
-		initialSphereColor = Color.GREEN;
-		theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
-		//sceneToRender.addObject(theSphere);
-
-		initialSpherePosition = new Vector(2, 0, 8);
+		initialSpherePosition = new Vector(-2, 1, 1);
 		initialSphereRadius = 1.0;
 		initialSphereColor = Color.BLUE;
 		theSphere = new Sphere(initialSpherePosition, initialSphereRadius, initialSphereColor);
 		sceneToRender.addObject(theSphere);
 
+		initialSpherePosition = new Vector(2.5, 2, 3);
+		initialSphereRadius = .3;
+		initialSphereColor = Color.GREEN;
+		theSphere = new Sphere(initialLightPosition, initialSphereRadius, initialSphereColor);
+		sceneToRender.addObject(theSphere);
+
 		Vector initialPlaneNormal = Y_VECTOR.getCopy();
 		double initialPlaneDisance = -1;
 		Color initialPlaneColor = new Color(0, 1, 0);
-		Material initialPlaneMaterial = new Material(initialPlaneColor, .4, 0, true);
+		Material initialPlaneMaterial = new Material(initialPlaneColor, 0, 0, true);
 		Plane thePlane = new Plane(initialPlaneNormal, initialPlaneDisance, initialPlaneMaterial);
-		sceneToRender.addObject(thePlane);
+		//	sceneToRender.addObject(thePlane);
 	}
 
 	public void renderImage() {
 		System.out.println("starting render");
-		int width = 640;
-		int height = 480;
 		int numPixels = width * height;
 		Color[] pixels = new Color[numPixels];
 		int pixelIndex = 0;
@@ -76,16 +76,10 @@ public class RayTracer {
 		for (int y = 0; y < height; y++) {
 			//for (int x = width - 1; x >= 0; x--) {
 			for (int x = 0; x < width; x++) {
-				//Creates a ray
-				Ray generatedRay = generateRay(x, y, width, height);
+				Ray generatedRay = generateRay(x, y);
+				Color finalColor = traceRay(generatedRay, 1);
 
-				//Gets list of intersections
-				ArrayList<RenderableObject> sceneObjects = sceneToRender.getSceneObjects();
-				ArrayList<Double> intersections = getIntersections(sceneObjects, generatedRay);
-
-				Color finalColor = determineColor(generatedRay, intersections);
-				pixels[pixelIndex] = finalColor;// sceneObjects.get(closestObjectIndex).getColor();
-
+				pixels[pixelIndex] = finalColor;
 				pixelIndex++;
 			}
 		}
@@ -97,7 +91,16 @@ public class RayTracer {
 		}
 	}
 
-	private Color determineColor(Ray generatedRay, ArrayList<Double> intersections) {
+	private Color traceRay(Ray ray, int depth) {
+		//Gets list of intersections
+		ArrayList<RenderableObject> sceneObjects = sceneToRender.getSceneObjects();
+		ArrayList<Double> intersections = getIntersections(sceneObjects, ray);
+
+		Color finalColor = determineColor(ray, intersections, depth);
+		return finalColor;
+	}
+
+	private Color determineColor(Ray generatedRay, ArrayList<Double> intersections, int depth) {
 		final Color DEFAULT_COLOR = Color.GRAY;
 		int closestObjectIndex = getClosestObjectIndex(intersections);
 		if (closestObjectIndex == -1) {
@@ -117,9 +120,23 @@ public class RayTracer {
 		if (closestObjectMaterial.isCheckerBoard()) {
 			closestObjectColor = getCheckerBoardColor(intersectionCoord, closestObjectMaterial);
 		}
-
 		Color returnColor = closestObjectColor.scalarColor(ambientLight);
-
+		/*
+		 * //Reflection from reflectivity if (closestObjectMaterial.getReflection() > 0) { Vector specularReflectionDirection =
+		 * getReflectionDirection(closestObjectNormal, rayDirection); Ray reflectionRay = new Ray(intersectionCoord, specularReflectionDirection);
+		 * ArrayList<Double> specularReflectionIntersections = getIntersections(sceneObjects, reflectionRay); int closestSpecularReflectedIndex =
+		 * getClosestObjectIndex(specularReflectionIntersections); // specularReflectionIntersections.set(closestObjectIndex, -1.0); //TODO see if needed to
+		 * prevent shadowing with self
+		 * 
+		 * if (closestSpecularReflectedIndex != -1) { if (specularReflectionIntersections.get(closestSpecularReflectedIndex) > 0.00) { // determine the position
+		 * and direction at the point of intersection with the reflection ray // the ray only affects the color if it reflected off something
+		 * 
+		 * Vector reflection_intersection_position = intersectionCoord.addVector(specularReflectionDirection
+		 * .multiplyVector(specularReflectionIntersections.get(closestSpecularReflectedIndex)));
+		 * 
+		 * Color reflection_intersection_color = traceRay(reflectionRay, depth - 1); returnColor = returnColor
+		 * .addColor(reflection_intersection_color.scalarColor(closestObjectMaterial.getReflection())); } } }
+		 */
 		int numLights = sceneToRender.getSceneLights().size();
 		for (int lightIndex = 0; lightIndex < numLights; lightIndex++) {
 			Light currentLight = sceneToRender.getSceneLights().get(lightIndex);
@@ -127,6 +144,7 @@ public class RayTracer {
 			double cosineOfAngle = closestObjectNormal.dotProduct(currentLight.getPosition());
 
 			if (cosineOfAngle > 0) {
+
 				boolean isShadowed = false;
 				Vector vectorToLight = currentLight.getPosition().addVector(intersectionCoord.negative()).normalize();
 				double distanceToLight = vectorToLight.magnitude();
@@ -143,10 +161,8 @@ public class RayTracer {
 				}
 
 				if (!isShadowed) {
-				returnColor = closestObjectColor;
-					returnColor = returnColor.multiplyColor(currentLight.getLightColor()).scalarColor(ambientLight + ((1.0 - ambientLight) * cosineOfAngle));
-					//returnColor.scalarColor(ambientLight + ((1.0 - ambientLight) * cosineOfAngle));
 
+					//returnColor = closestObjectColor; //TODO Change
 					if (closestObjectMaterial.getSpecular() > 0 && closestObjectMaterial.getSpecular() <= 1) {
 						double specular = getSpecular(rayDirection, closestObjectNormal, vectorToLight);
 						if (specular > 0) {
@@ -155,9 +171,10 @@ public class RayTracer {
 									.scalarColor(specular * closestObjectMaterial.getSpecular()));
 						}
 					}
-				}
-				else {
-					//return color when is shadowed
+					returnColor = returnColor.multiplyColor(currentLight.getLightColor())
+							.scalarColor(ambientLight + ((1.0 - ambientLight) * Math.max(cosineOfAngle, ambientLight)));
+					//returnColor.scalarColor(ambientLight + ((1.0 - ambientLight) * cosineOfAngle));
+
 				}
 			}
 		}
@@ -166,15 +183,19 @@ public class RayTracer {
 	}
 
 	private double getSpecular(Vector rayDirection, Vector closestObjectNormal, Vector vectorToLight) {
+		Vector reflection_direction = getReflectionDirection(rayDirection, closestObjectNormal);
+		double specular = reflection_direction.dotProduct(vectorToLight);
+		return specular;
+	}
+
+	private Vector getReflectionDirection(Vector rayDirection, Vector closestObjectNormal) {
 		double dot1 = closestObjectNormal.dotProduct(rayDirection.negative());
 		Vector scalar1 = closestObjectNormal.multiplyVector(dot1);
 		Vector add1 = scalar1.addVector(rayDirection);
 		Vector scalar2 = add1.multiplyVector(2);
 		Vector add2 = rayDirection.negative().addVector(scalar2);
-		Vector reflection_direction = add2.normalize();
-
-		double specular = reflection_direction.dotProduct(vectorToLight);
-		return specular;
+		Vector reflectionDirection = add2.normalize();
+		return reflectionDirection;
 	}
 
 	private Color getCheckerBoardColor(Vector intersectionCoord, Material closestObjectMaterial) {
@@ -209,10 +230,10 @@ public class RayTracer {
 		return index;
 	}
 
-	private Ray generateRay(int x, int y, int width, int height) {
+	private Ray generateRay(int x, int y) {
 		double aspectRatio = ((double) width) / ((double) height);
-		double xOffset = getXOffset(x, width, height, aspectRatio);
-		double yOffset = getYOffset(y, width, height, aspectRatio);
+		double xOffset = getXOffset(x, aspectRatio);
+		double yOffset = getYOffset(y, aspectRatio);
 
 		Vector cameraRight = mainCamera.cameraRight;
 		Vector cameraDown = mainCamera.cameraDown;
@@ -227,7 +248,7 @@ public class RayTracer {
 		return new Ray(rayOrigin, rayDirection);
 	}
 
-	private double getXOffset(int x, int width, int height, double aspectRatio) {
+	private double getXOffset(int x, double aspectRatio) {
 		double dX = (double) x;
 		double dWidth = (double) width;
 		double dHeight = (double) height;
@@ -245,7 +266,7 @@ public class RayTracer {
 		}
 	}
 
-	private double getYOffset(int y, int width, int height, double aspectRatio) {
+	private double getYOffset(int y, double aspectRatio) {
 		double dY = (double) y;
 		double dHeight = (double) height;
 		if (height < width) {
